@@ -28,17 +28,18 @@ class TruncateHtml
                 foreach ($words as $word) {
                     $plain = preg_replace('/\s+/', '', $word);
                     $wlen = mb_strlen($plain);
+                    $slen = mb_strlen($word) - $wlen; // Conta gli spazi
 
-                    if ($charCount + $wlen <= $start) {
-                        $charCount += $wlen;
+                    if ($charCount + $wlen + $slen <= $start) {
+                        $charCount += $wlen + $slen;
                         continue;
                     }
 
-                    if ($length !== null && $copiedCount + $wlen > $length) break;
+                    if ($length !== null && $copiedCount + $wlen + $slen > $length) break;
 
                     $output .= htmlspecialchars($word, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-                    $charCount += $wlen;
-                    $copiedCount += $wlen;
+                    $charCount += $wlen + $slen;
+                    $copiedCount += $wlen + $slen;
                 }
             } elseif ($node instanceof DOMElement) {
                 $output .= "<{$node->tagName}";
@@ -55,7 +56,7 @@ class TruncateHtml
                 }
 
                 $tag = array_shift($openTags);
-                $output = rtrim($output); // Removes white spaces before closing tag
+                $output = rtrim($output); // Rimuove gli spazi bianchi prima del tag di chiusura
                 $output .= "</$tag>";
             }
         };
@@ -65,10 +66,10 @@ class TruncateHtml
             if ($length !== null && $copiedCount >= $length) break;
         }
 
-        // Removes empty tags
+        // Rimuove i tag vuoti
         $output = preg_replace('/<(\w+)[^>]*>\s*<\/\1>/', '', $output);
 
-        // Removes empty tags with attributes
+        // Rimuove i tag vuoti con attributi
         $output = preg_replace('/<(\w+)[^>]*>\s*<\/\1>/', '', $output);
 
         return $output;
