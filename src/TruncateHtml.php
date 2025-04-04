@@ -68,6 +68,9 @@ class TruncateHtml
         // Removes empty tags
         $output = preg_replace('/<(\w+)[^>]*>\s*<\/\1>/', '', $output);
 
+        // Removes empty tags with attributes
+        $output = preg_replace('/<(\w+)[^>]*>\s*<\/\1>/', '', $output);
+
         return $output;
     }
 }
