@@ -92,4 +92,18 @@ class TruncateHtmlTest extends TestCase
             ],
         ];
     }
+
+    public function testTruncateCountSingleWhiteSpaceBetweenWords(): void
+    {
+        $html = "<p>12345 12345 12345</p>";
+        $result = TruncateHtml::truncate($html, 0, 10);
+        $this->assertEquals("<p>12345</p>", $result);
+    }
+
+    public function testTruncateCountSingleWhiteSpaceBetweenWords2(): void
+    {
+        $html = "<p>12345 12345 12345</p>";
+        $result = TruncateHtml::truncate($html, 0, 11);
+        $this->assertEquals("<p>12345 12345</p>", $result);
+    }
 }

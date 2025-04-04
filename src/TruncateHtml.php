@@ -37,6 +37,11 @@ class TruncateHtml
 
                     if ($length !== null && $copiedCount + $wlen + $slen > $length) break;
 
+                    // Remove leading spaces from the tag content
+                    if ($copiedCount === 0 && preg_match('/^\s+$/', $word)) {
+                        continue;
+                    }
+
                     $output .= htmlspecialchars($word, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
                     $charCount += $wlen + $slen;
                     $copiedCount += $wlen + $slen;
